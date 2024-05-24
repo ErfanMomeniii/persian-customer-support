@@ -3,7 +3,7 @@ from crawl.models.flight import flight
 from crawl.models.hotel import hotel
 
 
-class sqllite:
+class sqlite:
     def __init__(self):
         self.cursor = None
         self.conn = None

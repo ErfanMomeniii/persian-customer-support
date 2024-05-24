@@ -15,15 +15,6 @@ def save_to_file(data, file_path=''):
 
 
 class AlibabaScraper:
-    def __init__(self, scrap=None):
-        if scrap is None:
-            scrap = []
-        if 'flight' in scrap:
-            self.flight_scraper()
-
-        if 'hotel' in scrap:
-            self.hotel_scraper()
-
     @staticmethod
     def flight_scraper():
         config = configparser.ConfigParser()
@@ -36,7 +27,7 @@ class AlibabaScraper:
         flights = []
         for s in inner_cities:
             for d in inner_cities:
-                for adult in range(1, 10):
+                for adult in range(1, 3):
                     for st in range(0, len(dates)):
                         for fi in range(st + 1, len(dates)):
                             if s != d:
@@ -67,21 +58,19 @@ class AlibabaScraper:
                                     returning_flights = response['result']['returning']
                                     for df in departing_flights:
                                         f = flight(df['originName'], df['destinationName'], df['leaveDateTime'],
-                                                          df['arrivalDateTime'],
-                                                          df['priceAdult'], df['airlineName'])
+                                                   df['arrivalDateTime'],
+                                                   df['priceAdult'], df['airlineName'])
                                         flights.append(f)
 
                                     for rf in returning_flights:
                                         f = flight(rf['originName'], rf['destinationName'], rf['leaveDateTime'],
-                                                          rf['arrivalDateTime'],
-                                                          rf['priceAdult'], rf['airlineName'])
+                                                   rf['arrivalDateTime'],
+                                                   rf['priceAdult'], rf['airlineName'])
                                         flights.append(f)
                                 except:
                                     continue
 
-        data = [f.to_dict() for f in flights]
-        save_to_file(data=data, file_path=os.path.join(script_dir, 'flights.json'))
-        return
+        return flights
 
     @staticmethod
     def hotel_scraper():
@@ -96,8 +85,8 @@ class AlibabaScraper:
         for c in hotel_cities:
             for st in range(0, len(dates)):
                 for fi in range(st + 1, len(dates)):
-                    for adult in range(0, 10):
-                        for child in range(0, 10):
+                    for adult in range(0, 3):
+                        for child in range(0, 3):
                             try:
                                 cl = c.split('_')
                                 data = {
@@ -158,6 +147,4 @@ class AlibabaScraper:
                                     hotels.append(ht)
                             except:
                                 continue
-
-        data = [h.to_dict() for h in hotels]
-        save_to_file(data=data, file_path=os.path.join(script_dir, 'hotels.json'))
+        return hotels
